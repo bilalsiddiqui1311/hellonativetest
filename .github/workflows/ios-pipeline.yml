@@ -14,25 +14,19 @@ jobs:
         
     - run: npm ci
 
+    - run: xcode-select -p
+    
     - run: pod install
       working-directory: ios
       name: Install pod dependencies
 
     - name: Build iOS (debug)
-      run: xcodebuild \
-        -workspace ios/HelloReactNative.xcworkspace \
-        -scheme HelloReactNative \
-        clean archive \
-        -sdk iphoneos \
-        -configuration Debug \
-        -UseModernBuildSystem=NO \
-        -archivePath $PWD/HelloReactNative \
-        CODE_SIGNING_ALLOWED=NO
+      run: "xcodebuild -workspace ios/AwesomeProject.xcworkspace -scheme AwesomeProject clean archive -sdk iphoneos -configuration Debug -UseModernBuildSystem=NO -archivePath $PWD/AwesomeProject CODE_SIGNING_ALLOWED=NO"
 
     - name: Compress .xcarchive
-      run: zip -r -9 HelloReactNative.xcarchive.zip $PWD/HelloReactNative.xcarchive/
+      run: zip -r -9 AwesomeProject.xcarchive.zip $PWD/AwesomeProject.xcarchive/
 
     - uses: actions/upload-artifact@v2
       with:
         name: ios-xarchive
-        path: HelloReactNative.xcarchive.zip
+        path: AwesomeProject.xcarchive.zip
