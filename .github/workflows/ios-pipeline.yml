@@ -35,7 +35,7 @@ jobs:
       run: "xcodebuild -workspace ios/AwesomeProject.xcworkspace -scheme AwesomeProject clean archive -sdk iphoneos -configuration Debug -UseModernBuildSystem=NO -archivePath $PWD/AwesomeProject CODE_SIGNING_ALLOWED=NO"
 
     - name: Build ipa
-      run: xcodebuild -exportArchive -archivePath $PWD/AwesomeProject.xcarchive -exportPath . -exportOptionsPlist info.plist
+      run: xcodebuild -exportArchive -archivePath $PWD/AwesomeProject.xcarchive -exportPath . -exportOptionsPlist AwesomeProject/info.plist
 
     - name: Upload IPA
       uses: actions/upload-artifact@v2
