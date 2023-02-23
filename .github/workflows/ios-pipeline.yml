@@ -25,7 +25,7 @@ jobs:
 
     - name: Build ipa
       run: |
-        xcodebuild -exportArchive -archivePath $PWD/AwesomeProject -exportPath $PWD . -exportOptionsPlist $PWD/AwesomeProject \
+        xcodebuild -exportArchive -archivePath $PWD/AwesomeProject -exportPath $PWD . -exportOptionsPlist $PWD/info \
 
     - name: Compress .xcarchive
       run: zip -r -9 AwesomeProject.xcarchive.zip $PWD/AwesomeProject.xcarchive/
