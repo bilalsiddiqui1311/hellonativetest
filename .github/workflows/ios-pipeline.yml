@@ -30,3 +30,7 @@ jobs:
       with:
         name: ios-xarchive
         path: AwesomeProject.xcarchive.zip
+        
+    - name: Build ipa
+      run: |
+        xcodebuild -exportArchive -archivePath build/AwesomeProject.xcarchive
