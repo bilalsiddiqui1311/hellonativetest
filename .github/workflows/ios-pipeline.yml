@@ -22,8 +22,8 @@ jobs:
 
     - name: Build and archive
       run: |
-        xcodebuild -scheme iOS -archivePath Demo.xcarchive archive
-        xcodebuild -exportArchive -archivePath Demo.xcarchive -exportPath . -exportOptionsPlist info.plist
+        xcodebuild -workspace ios/AwesomeProject.xcworkspace -scheme iOS -archivePath $PWD/AwesomeProject archive
+        xcodebuild -exportArchive -archivePath $PWD/AwesomeProject.xcarchive -exportPath . -exportOptionsPlist info.plist
 
     - name: Upload IPA
       uses: actions/upload-artifact@v2
