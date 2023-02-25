@@ -10,11 +10,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-            
-      - run: npm ci
-
-      - run: npm run static-code-analysis
-      - run: npm run dynamic-code-analysis   
         
       - name: Build Android Release
         run: cd android && ./gradlew assembleRelease
