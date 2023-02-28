@@ -1,19 +1,95 @@
-FOR ANDROID PIPELINE:
-
-Firstly to mention the Triggers, Like where branches would be mentioned and after the commit on branch, the pipeline will automatically triggered.
-Install Dependencies.
-Change directory to Android and buld the release.
-Upload the build in the artifacts of github.
-Download the artifact and install and test the realease.
+############################################################## FOR ANDROID PIPELINE ##############################################################
 
 
-FOR IOS PIPELINE:
 
-Firstly to mention the Triggers, Like where branches would be mentioned and after the commit on branch, the pipeline will automatically triggered.
-Install Dependencies.
-check the current xcode path.
-Installation of POD.
-Build the xcarcheive file.
-Build the ipa file from xcarcheive file.
-Upload that ipa file into artifacts of github.
-Download the artifact and install and test the realease.
+=> First step is to mention the Triggers, where branches would be mentioned and after code commit on that branch, the pipeline will automatically triggered.
+        on:
+          push:
+            branches: [andriod]
+
+=> Install Dependencies:
+        run: npm install
+        run: npm ci
+
+=> Code Quality checks:
+
+      - run: npm run static-code-analysis
+      - run: npm run dynamic-code-analysis        
+
+It'll check if there's any error in the code or any ESlinting error, it'll fail the pipeline. And eventually it'll protect to build the faulty code.
+
+
+=> Change directory to Android & build the release.
+
+        cd android && ./gradlew assembleRelease        
+
+It'll generates debug signed APK into a zip folder. The Gradle generates the release APK file and saves it in the "app/build/outputs/apk/release" directory of your Android project.
+  
+
+=> Upload the build in the artifacts of github.
+
+        uses: actions/upload-artifact@v1        
+        with:
+          name: release
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+This will pick the zip folder which contain APK file from the path provided in the command, and upload that into Artifact directory of the github actions.
+
+=> The last step is to download the artifact into local machine, unzip the folder and distribute the APK file. The QA will install the app with APK file and can perform testing.
+
+
+
+
+
+
+
+
+
+##############################################################  FOR IOS PIPELINE  ##############################################################
+
+
+=> First step is to mention the Triggers, where branches would be mentioned and after code commit on that branch, the pipeline will automatically triggered.
+        on:
+          push:
+            branches: [ios]
+
+=> Install & Setup Dependencies:
+         uses: actions/setup-node@v1
+         run: npm ci
+
+=> check the current xcode path.
+         run: xcode-select -p
+
+The xcode-select command is used to manage the active Xcode developer directory on a macOS system. Overall, xcode-select -p is a command used to check the currently selected Xcode developer directory on a macOS system.
+
+
+=> Change Directory & Install POD.
+          working-directory: ios
+          name: Install pod dependencies
+
+It allows developers to easily manage and incorporate third-party libraries and frameworks into their projects.
+
+=> Build the xcarcheive file.
+         run: "xcodebuild -workspace ios/AwesomeProject.xcworkspace -scheme AwesomeProject clean archive -sdk iphoneos -configuration Debug -UseModernBuildSystem=NO -archivePath $PWD/AwesomeProject CODE_SIGN_IDENTITY='' PROVISIONING_PROFILE='' CODE_SIGNING_ALLOWED=NO"
+
+
+Overall, this command is used to build an iOS app with specific settings, options, and build configuration, and to save the resulting xcarchive at a specified location.
+In this case, The path is set to $PWD/AwesomeProject, which means that the xcarchive file will be saved in the current working directory(IOS) in a folder named "AwesomeProject".
+If you are testing it locally, or the current directory is Desktop, the xcarchive file will be save in Desktop. 
+
+=> Build the ipa file from xcarcheive file.
+        run: xcodebuild -exportArchive -archivePath $PWD/AwesomeProject.xcarchive -exportPath . -exportOptionsPlist ios/AwesomeProject/Info.plist CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE=""
+
+ This command will build the IPA file from the xcarcheive file, But due to lack of Apple account, IPA file isn't generated.
+
+
+=> Upload that ipa file into artifacts of github.
+          uses: actions/upload-artifact@v2
+          with:
+            name: AwesomeProject
+            path: AwesomeProject.ipa
+ 
+As, we'll already set the working directory to IOS, so in path parameter only ipa file name is required.         
+            
+
+=> The last step is to download the artifact into local machine, unzip the folder and distribute the IPA file. The listedIP devices will install IPA file and can perform testing.
