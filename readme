@@ -1,0 +1,19 @@
+FOR ANDROID PIPELINE:
+
+Firstly to mention the Triggers, Like where branches would be mentioned and after the commit on branch, the pipeline will automatically triggered.
+Install Dependencies.
+Change directory to Android and buld the release.
+Upload the build in the artifacts of github.
+Download the artifact and install and test the realease.
+
+
+FOR IOS PIPELINE:
+
+Firstly to mention the Triggers, Like where branches would be mentioned and after the commit on branch, the pipeline will automatically triggered.
+Install Dependencies.
+check the current xcode path.
+Installation of POD.
+Build the xcarcheive file.
+Build the ipa file from xcarcheive file.
+Upload that ipa file into artifacts of github.
+Download the artifact and install and test the realease.
