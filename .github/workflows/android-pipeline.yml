@@ -23,14 +23,31 @@ jobs:
       - name: list files
         run: ls -lrt android/app/build/outputs/apk/release
 
+  upload-android:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: android_testers
+          file: app-release.apk
+
+
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v1
 #         with:
 #           name: release
 #           path: android/app/build/outputs/apk/release/app-release.apk
 
-      - name: Deploy to Firebase
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
-        with:
-          token: ${{secrets.FIREBASE_TOKEN}}
-          file: android/app/build/outputs/apk/release/app-release.apk
+#       - name: Deploy to Firebase
+#         uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+#         with:
+#           token: ${{secrets.FIREBASE_TOKEN}}
+#           file: android/app/build/outputs/apk/release/app-release.apk
