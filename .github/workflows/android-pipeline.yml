@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Google Play Store upload
-        uses: r0adkll/upload-google-play@v2.2.0
+        uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ secrets.GOOGLE_PLAY_STORE_JSON }}
           packageName: com.example.app
