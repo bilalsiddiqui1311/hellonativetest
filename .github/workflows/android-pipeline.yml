@@ -44,8 +44,21 @@ jobs:
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: Testers
           file: app-release.apk
-
-
+          
+  upload-appStore:
+    needs: upload-android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Google Play Store upload
+        uses: r0adkll/upload-google-play@v2.2.0
+        with:
+          serviceAccountJson: ${{ secrets.GOOGLE_PLAY_STORE_JSON }}
+          packageName: com.example.app
+          track: internal
+          releaseFiles: android/app/build/outputs/apk/release/app-release.apk
+          releaseName: v1.0.0
+          whatsNew: "Initial release"
+          
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v1
 #         with:
