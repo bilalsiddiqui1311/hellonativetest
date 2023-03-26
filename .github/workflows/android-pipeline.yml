@@ -57,6 +57,7 @@ jobs:
           track: internal
           releaseFiles: android/app/build/outputs/apk/release/app-release.apk
           releaseName: v1.0.0
+          status: inProgress
           
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v1
