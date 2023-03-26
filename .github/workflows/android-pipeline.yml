@@ -29,7 +29,7 @@ jobs:
       - name: list files
         run: ls -lrt android/app/build/outputs/apk/release
 
-  upload-android:
+  firebase-distribution:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,7 @@ jobs:
           file: app-release.apk
           
   upload-appStore:
-    needs: upload-android
+    needs: firebase-distribution
     runs-on: ubuntu-latest
     steps:
       - name: Google Play Store upload
