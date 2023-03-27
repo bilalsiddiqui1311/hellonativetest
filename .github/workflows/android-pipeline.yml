@@ -58,6 +58,7 @@ jobs:
           releaseFiles: android/app/build/outputs/apk/release/app-release.apk
           releaseName: v1.0.0
           status: inProgress
+          userFraction: 0.33
           
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v1
