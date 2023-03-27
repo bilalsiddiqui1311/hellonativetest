@@ -49,13 +49,17 @@ jobs:
     needs: firebase-distribution
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release
       - name: Google Play Store upload
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ secrets.GOOGLE_PLAY_STORE_JSON }}
           packageName: com.blueprint
           track: internal
-          releaseFiles: android/app/build/outputs/apk/release/app-release.apk
+          releaseFiles: app-release.apk
           releaseName: v1.0.0
           status: inProgress
           userFraction: 0.33
