@@ -37,14 +37,19 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: release
+
+      - name: list files
+        run: ls    
+      
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
-          # token: ${{secrets.FIREBASE_TOKEN}}
+          token: ${{secrets.FIREBASE_TOKEN}}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: Testers
           file: app-release.apk
+          releaseNotesFile: README.md
           
   # upload-appStore:
   #   needs: firebase-distribution
