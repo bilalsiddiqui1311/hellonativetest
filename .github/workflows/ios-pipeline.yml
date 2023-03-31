@@ -1,34 +1,55 @@
-name: iOS
+name: Build and Distribute iOS App
 
 on:
   push:
     branches: [ios]
+
+env:
+  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+
 jobs:
-  build:
+  build-and-distribute:
     runs-on: macos-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-        
-    - run: npm ci
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - run: xcode-select -p
-    
-    - run: pod install
-      working-directory: ios
-      name: Install pod dependencies
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
 
-    - name: Build iOS (debug)
-      run: "xcodebuild -workspace ios/AwesomeProject.xcworkspace -scheme AwesomeProject clean archive -sdk iphoneos -configuration Debug -UseModernBuildSystem=NO -archivePath $PWD/AwesomeProject CODE_SIGN_IDENTITY='' PROVISIONING_PROFILE='' CODE_SIGNING_ALLOWED=NO"
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build ipa
-      run: xcodebuild -exportArchive -archivePath $PWD/AwesomeProject.xcarchive -exportPath . -exportOptionsPlist ios/AwesomeProject/Info.plist CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE=""
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
 
-    - name: Upload IPA
-      uses: actions/upload-artifact@v2
-      with:
-        name: AwesomeProject
-        path: AwesomeProject.ipa
+      - name: Authenticate Firebase
+        run: firebase login:ci --token "${{ env.FIREBASE_TOKEN }}"
+
+      - name: Build iOS app
+        run: |
+          xcodebuild archive \
+            -workspace YourProject.xcworkspace \
+            -scheme YourProject \
+            -configuration Release \
+            -archivePath YourProject.xcarchive
+
+      - name: Distribute app through Firebase
+        run: |
+          firebase appdistribution:distribute YourProject.xcarchive \
+            --app YourFirebaseAppID \
+            --release-notes "Your release notes"
+
+      - name: Upload app to Apple Store
+        uses: fastlane/fastlane@2.191.0
+        with:
+          subcommand: deliver
+          ipa: YourProject.ipa
+          username: ${{ env.FASTLANE_USER }}
+          password: ${{ env.FASTLANE_PASSWORD }}
+          skip_screenshots: true
