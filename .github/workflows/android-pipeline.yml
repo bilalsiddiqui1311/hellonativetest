@@ -67,15 +67,3 @@ jobs:
   #         releaseName: v1.0.0
   #         status: inProgress
   #         userFraction: 0.33
-          
-#       - name: Upload Artifact
-#         uses: actions/upload-artifact@v1
-#         with:
-#           name: release
-#           path: android/app/build/outputs/apk/release/app-release.apk
-
-#       - name: Deploy to Firebase
-#         uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
-#         with:
-#           token: ${{secrets.FIREBASE_TOKEN}}
-#           file: android/app/build/outputs/apk/release/app-release.apk
